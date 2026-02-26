@@ -53,7 +53,16 @@ app.get('/v1/models', (req, res) => {
     }))
   });
 });
-
+app.all('/v1/chat/completions', (req, res, next) => {
+  if (req.method === 'POST') return next();
+  res.status(405).json({
+    error: {
+      message: 'Method not allowed',
+      type: 'invalid_request_error',
+      code: 405
+    }
+  });
+});
 // Chat completions
 app.post('/v1/chat/completions', async (req, res) => {
   try {
